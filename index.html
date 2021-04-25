@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"></head>
+        <title>Hero crush</title>
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="scripts.js"></script>
+    </head>
+    <body>
+    <div class="container">
+    
+    <div class="map">
+        <label for="Terrain">Choose a terrain:</label>
+        <select name="Terrain" id="terrain">
+            <option value="snowy">Snowy</option>
+            <option value="desert">Desert</option>
+        </select>
+        <label for="size">Size:</label>
+        <select name="size" id="size">
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+        </select>
+        <label for="island">Island:</label>
+        <select name="island" id="island">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+        <button type="button" class="mapGeneratorButton">Generate map</button>
+        <div class="grid hide"> 
+        </div>
+    
+    </div>
+
+    <div>
+        <div class="items hide">
+            <div><img src="town.png" id="town" draggable="true"></div>
+            <div><img src="cave.png" id="cave" draggable="true"></div>
+            <div><img src="bridge.png" id="bridge" draggable="true"></div>
+            <div><img src="tavern.png" id="tavern" draggable="true"></div>
+            <div><img src="dragon.png" id="dragon" draggable="true"></div>
+            <div><img src="treasure.png" id="treasure" draggable="true"></div>
+            <div><img src="player.png" id="player" draggable="true"></div>
+            <div><img src="secret.png" id="secret" draggable="true"></div>
+            <div style="background-color: seagreen" draggable="true"></div>
+            <div style="background-color:blue" draggable="true"></div>
+        </div>
+    </div>
+    </div>
+    </body>
+</html>

@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', ()=>{
     
+    ruleCloseHandler();
     const mapGenerateButton = document.querySelector(".mapGeneratorButton");
     //This event generates the map
     mapGenerateButton.addEventListener('click',()=>{
@@ -19,6 +20,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
         document.querySelector(".items").classList.remove("hide");
         Keymovements();
+        const rules = document.querySelector('.rules');
+        rules.classList.add("hide");
   
     })
 
@@ -76,8 +79,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             const alertBox = document.querySelector(".alertbox");
             alertBox.classList.remove("hide");
             console.log(alertBox.classList)
-            setTimeout(()=>alertBox.classList.add("hide"), 3000);
-            
+            setTimeout(()=>alertBox.classList.add("hide"), 3000);           
             return;
         }
         const battlemap = document.querySelector(".battlemap");
@@ -207,6 +209,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
             return null;
         }    
     }
+    function ruleCloseHandler(){
+    const closeRulesButton = document.querySelector(".closeRules");
+    closeRulesButton.addEventListener('click',()=>{
+        const rules = document.querySelector('.rules');
+        rules.classList.add("hide");
+    })
+    }
+    
 
 class Map{
     

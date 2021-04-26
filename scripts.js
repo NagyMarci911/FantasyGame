@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
             const mapHTML =document.querySelector(".grid");
             mapHTML.innerHTML="";
         }
-        map = new Map(sizeValue,terrainValue,islandValue);
+        map = new Map(sizeValue,terrainValue,islandValue,".grid");
         if(map.grid.classList.contains('hide')){
             map.grid.classList.remove('hide');  
         }
         document.querySelector(".items").classList.remove("hide");
-
+        Keymovements();
   
     })
 
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     let currentItem;
     addEventsToDraggableItems();
+    
 
     function addEventsToDraggableItems(){
         const itemContiner = document.querySelector(".items");
@@ -34,7 +35,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
             item.addEventListener('dragstart',dragStart);
             item.addEventListener('drop',dragDrop);
         }
-
+        const battleItems = document.querySelector(".battleItems")
+        const allBattleItems = battleItems.children;
+        for(const item of allBattleItems){
+            item.addEventListener('dragstart',dragStart);
+            item.addEventListener('drop',dragDrop);
+        }
     }
 
     function dragStart(){
@@ -61,11 +67,146 @@ document.addEventListener('DOMContentLoaded', ()=>{
     function dragOver(e){
         e.preventDefault();
     }
+
+    //Battle map handler
+    const battleMapButton = document.querySelector(".battleMapGeneratorButton");
+    battleMapButton.addEventListener('click',generateBattleMap)
+    function generateBattleMap(){
+        const battlemap = document.querySelector(".battlemap");
+        const battleIcons = document.querySelector(".battleContainer");
+        battleIcons.classList.remove('hide');
+        let terrain = document.getElementById('terrain');
+        let terrainValue = terrain.options[terrain.selectedIndex].value;
+        if(fightmap !== undefined){
+            battlemap.innerHTML="";
+        }
+        fightmap = new Map("S",terrainValue,false,".battlemap");
+        for(let i = 0; i < 225;i++){
+            const div = document.querySelector(`.battlemap> div:nth-child(${i+1})`)
+            div.style.width="40px";
+            div.style.height="40px";
+        }
+        //battlemap.lastChild.remove();
+        const container =document.querySelector('.container');
+        container.classList.add("grayish")
+        const battlecontainer = document.querySelector('.battleContainer');
+        const body = document.querySelector("body");
+        currentView=".battlemap"
+        Keymovements();
+        
+    }
+    //battlemap closing
+    const closeButton = document.querySelector(".close");
+    closeButton.addEventListener('click',()=>{
+        const battleIcons = document.querySelector(".battleContainer");
+        battleIcons.classList.add('hide');
+        const container =document.querySelector('.container');
+        container.classList.remove("grayish")
+        currentView =".grid";
+    })
+
+    //Adding the key movement for icons
+
+    function Keymovements(){    
+        const itemcontainer = document.querySelector(currentView);
+        const allDiv = itemcontainer.children;
+        for(const item of allDiv){
+            item.addEventListener('click', highlightItem.bind(item,allDiv))
+        }
+    }
+    //removes the last highlight and adds it to the clicked div
+    function highlightItem(allDiv){
+        for(let i = 0; i<allDiv.length;i++){
+            if(allDiv[i].classList.contains('giveBorder')){
+                allDiv[i].classList.remove('giveBorder')
+            }
+        }
+        this.classList.toggle('giveBorder')
+    }
+    document.addEventListener('keydown',function keyPressed(event){
+        //checking for highlighted item
+        const itemcontainer = document.querySelector(currentView);
+        const allDiv = itemcontainer.children;
+        let highlightedItem;
+        let index;
+        for(let i = 0; i<allDiv.length;i++){
+            if(allDiv[i].classList.contains('giveBorder')){
+                highlightedItem = allDiv[i];
+                index=i;
+            }
+        }
+        console.log(index)
+        if(highlightedItem){
+            //Checking which key was pressed and moving highlight that direction with icon url
+            let iconURL;
+            let size;
+            console.log(currentView)
+            if(currentView==".grid"){
+                size = map.pixNum;
+            }else{
+                size = fightmap.pixNum;
+            }
+            if(event.keyCode==39){
+                highlightedItem.classList.remove('giveBorder');
+                iconURL = getURL(highlightedItem);        
+                allDiv[index+1].classList.add('giveBorder');
+                if(iconURL !== null){
+                    allDiv[index+1].style.backgroundImage=iconURL;
+                }             
+            }else if(event.keyCode==37){
+                highlightedItem.classList.remove('giveBorder');
+                iconURL = getURL(highlightedItem); 
+                allDiv[index-1].classList.add('giveBorder');
+                if(iconURL !== null){
+                    allDiv[index-1].style.backgroundImage=iconURL;
+                }    
+            }else if(event.keyCode==40){               
+                highlightedItem.classList.remove('giveBorder');
+                iconURL = getURL(highlightedItem);
+                if(index >= Math.floor(size-Math.sqrt(size))){
+                    index -= Math.floor(size);                   
+                    index++;
+                }
+                allDiv[index+Math.floor(Math.sqrt(size))].classList.add('giveBorder');
+                if(iconURL !== null){
+                    allDiv[index+Math.floor(Math.sqrt(size))].style.backgroundImage=iconURL;
+                }    
+            }else if(event.keyCode == 38){
+                highlightedItem.classList.remove('giveBorder');
+                iconURL = getURL(highlightedItem);
+                if(index < Math.floor(Math.sqrt(size))){
+                    index += Math.floor(size);                   
+                    index--;
+                }            
+                allDiv[index-Math.floor(Math.sqrt(size))].classList.add('giveBorder');
+                if(iconURL !== null){
+                    allDiv[index-Math.floor(Math.sqrt(size))].style.backgroundImage=iconURL;
+                } 
+            }
+        
+
+        }
+    })
+
+    //removing and getting URL from highlighted div
+    function getURL(containerDiv){
+        let url;
+        if(containerDiv.style.backgroundImage){
+            url = containerDiv.style.backgroundImage;
+            containerDiv.style.backgroundImage = null;
+        return url;
+        }else{
+            return null;
+        }    
+    }
+
 class Map{
     
-    constructor(size,landType,isIsland){
-        this.grid = document.querySelector(".grid");       
+    pixNum;
+    constructor(size,landType,isIsland,containerClass){
+        this.grid = document.querySelector(containerClass);     
         this.generateMap(size,landType,isIsland);
+        currentView =".grid";
     }
 
     generateMap(size,landType,isIsland){
@@ -79,8 +220,8 @@ class Map{
         }else{
             pixels = 900;
         }
+        this.pixNum = pixels;
         divsize = Math.sqrt(600*600/pixels);
-        console.log(divsize);
         for(let i = 0; i < pixels;i++){
             const div = document.createElement("div");
             const colour =  this.getRandomColor(landType,i,pixels,allPixels);
@@ -206,7 +347,8 @@ class Map{
 
     
 }
+let currentView;
 let map;
-
+let fightmap;
 })
 

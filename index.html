@@ -27,6 +27,7 @@
             <option value="false">No</option>
         </select>
         <button type="button" class="mapGeneratorButton">Generate map</button>
+        <button type="button" class="battleMapGeneratorButton">Generate battle map</button>
         <div class="grid hide"> 
         </div>
     
@@ -46,6 +47,17 @@
             <div style="background-color:blue" draggable="true"></div>
         </div>
     </div>
+    </div>  
+    <div class="battleContainer hide">
+        <div class="battlemap"></div>
+        <div class="items battleItems">
+            <div><img src="imgs/dragon.png" id="dragon" draggable="true"></div>
+            <div><img src="imgs/treasure.png" id="treasure" draggable="true"></div>
+            <div><img src="imgs/player.png" id="player" draggable="true"></div>
+            <div><img src="imgs/secret.png" id="secret" draggable="true"></div>
+        </div>
+        <div class="close"><button>X</button></div>
     </div>
+         
     </body>
 </html>

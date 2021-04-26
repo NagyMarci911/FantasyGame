@@ -24,6 +24,38 @@
     width: 50px;
     height: 50px;
 }
+.battleContainer{
+    position: fixed;
+    display: block;
+    top:0%;
+    left:0%;
+    width: 730px;
+    height: 600px;
+    background-color: bisque;
+}
+.battlemap{
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.battleItems{
+    position: fixed;
+    padding-left: 600px;
+}
+.close{
+    position: fixed;
+    padding-left: 705px;
+}
 .hide{
     display: none;
+}
+.grayish{
+    opacity: 0.1;
+    
+}
+.giveBorder{
+    outline: solid 2px red;
+    outline-offset: -2px;
 }

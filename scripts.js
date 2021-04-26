@@ -72,6 +72,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const battleMapButton = document.querySelector(".battleMapGeneratorButton");
     battleMapButton.addEventListener('click',generateBattleMap)
     function generateBattleMap(){
+        if(map === undefined){
+            const alertBox = document.querySelector(".alertbox");
+            alertBox.classList.remove("hide");
+            console.log(alertBox.classList)
+            setTimeout(()=>alertBox.classList.add("hide"), 3000);
+            
+            return;
+        }
         const battlemap = document.querySelector(".battlemap");
         const battleIcons = document.querySelector(".battleContainer");
         battleIcons.classList.remove('hide');
